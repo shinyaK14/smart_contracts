@@ -6,6 +6,9 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
+import "./rarible/royalties/contracts/impl/RoyaltiesV2Impl.sol";
+import "./rarible/royalties/contracts/LibPart.sol";
+import "./rarible/royalties/contracts/LibRoyaltiesV2.sol";
 
 contract NFTCryplo is ERC1155, Ownable {
   mapping(uint256 => address) private minters;
