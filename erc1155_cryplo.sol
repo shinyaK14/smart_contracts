@@ -17,6 +17,7 @@ contract NFTCryplo is ERC1155, Ownable {
 
   uint MINT_PRICE = 1 ether;
   uint PREMIUM_MINT_PRICE = 5 ether;
+  address constant private cryploAddress = 0x607228c6C95C8ddbd8115c15ab10E5C4B1Fab439;
 
   function contractURI() public pure returns (string memory) {
     return "https://cryplo-api.herokuapp.com/contract_metadata.json";
@@ -28,6 +29,7 @@ contract NFTCryplo is ERC1155, Ownable {
       minters[id] = msg.sender;
     }
     _mint(account,id,amount,"");
+    setRoyalties(id);
   }
 
   function bulkMint(address account, uint256[] memory ids, uint256[] memory amount) public payable {
@@ -72,10 +74,33 @@ contract NFTCryplo is ERC1155, Ownable {
   function selfDestruct() onlyOwner public payable {
     selfdestruct(payable(owner()));
   }
+
+  function setRoyalties(
+      uint256 _tokenId
+      ) public onlyOwner {
+    LibPart.Part[] memory _royalties = new LibPart.Part[](1);
+    _royalties[0].value = 1000;
+    _royalties[0].account = cryploAddress;
+    _saveRoyalties(_tokenId, _royalties);
+  }
+
+  function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    virtual
+    override(ERC1155
+        returns (bool)
+        {
+        if (interfaceId == LibRoyaltiesV2._INTERFACE_ID_ROYALTIES) {
+        return true;
+        }
+        return super.supportsInterface(interfaceId);
+        }
+
 }
 
-// https://docs.openzeppelin.com/contracts/4.x/api/access#AccessControl
-//https://rinkeby.rarible.com/token/polygon/0x21c5FE54806cB616e3398dBBA94341F43afaB73b:2?tab=owners
+        // https://docs.openzeppelin.com/contracts/4.x/api/access#AccessControl
+        //https://rinkeby.rarible.com/token/polygon/0x21c5FE54806cB616e3398dBBA94341F43afaB73b:2?tab=owners
 
 
 
