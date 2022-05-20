@@ -10,14 +10,13 @@ import "./rarible/royalties/contracts/impl/RoyaltiesV2Impl.sol";
 import "./rarible/royalties/contracts/LibPart.sol";
 import "./rarible/royalties/contracts/LibRoyaltiesV2.sol";
 
-contract NFTCryplo is ERC1155, Ownable {
+contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
   mapping(uint256 => address) private minters;
 
   constructor() ERC1155(""){}
 
   uint MINT_PRICE = 1 ether;
   uint PREMIUM_MINT_PRICE = 5 ether;
-  address constant private cryploAddress = 0x607228c6C95C8ddbd8115c15ab10E5C4B1Fab439;
 
   function contractURI() public pure returns (string memory) {
     return "https://cryplo-api.herokuapp.com/contract_metadata.json";
@@ -79,8 +78,9 @@ contract NFTCryplo is ERC1155, Ownable {
       uint256 _tokenId
       ) public onlyOwner {
     LibPart.Part[] memory _royalties = new LibPart.Part[](1);
+    address cryploAddress = 0x607228c6C95C8ddbd8115c15ab10E5C4B1Fab439;
+    _royalties[0].account = payable(cryploAddress);
     _royalties[0].value = 1000;
-    _royalties[0].account = cryploAddress;
     _saveRoyalties(_tokenId, _royalties);
   }
 
@@ -88,7 +88,7 @@ contract NFTCryplo is ERC1155, Ownable {
     public
     view
     virtual
-    override(ERC1155
+    override(ERC1155)
         returns (bool)
         {
         if (interfaceId == LibRoyaltiesV2._INTERFACE_ID_ROYALTIES) {
