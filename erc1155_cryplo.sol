@@ -22,13 +22,13 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
     return "https://cryplo-api.herokuapp.com/contract_metadata.json";
   }
 
-  function mint(address account,uint256 id,uint256 amount) public {
+  function mint(address account, uint256 id, uint256 amount) public {
     require(minters[id] == address(0) || minters[id] == msg.sender);
     if(minters[id] == address(0)) {
       minters[id] = msg.sender;
     }
     _mint(account,id,amount,"");
-    setRoyalties(id);
+    setRoyalties(account, id);
   }
 
   function bulkMint(address account, uint256[] memory ids, uint256[] memory amount) public payable {
@@ -75,12 +75,14 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
   }
 
   function setRoyalties(
+      address account,
       uint256 _tokenId
       ) private {
     LibPart.Part[] memory _royalties = new LibPart.Part[](1);
-    address cryploAddress = 0x607228c6C95C8ddbd8115c15ab10E5C4B1Fab439;
-    _royalties[0].account = payable(cryploAddress);
+    _royalties[0].account = payable(owner());
     _royalties[0].value = 1000;
+    _royalties[0].account = payable(account);
+    _royalties[0].value = 6000;
     _saveRoyalties(_tokenId, _royalties);
   }
 
