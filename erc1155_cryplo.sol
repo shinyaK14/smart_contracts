@@ -76,7 +76,7 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
 
   function setRoyalties(
       uint256 _tokenId
-      ) public onlyOwner {
+      ) private {
     LibPart.Part[] memory _royalties = new LibPart.Part[](1);
     address cryploAddress = 0x607228c6C95C8ddbd8115c15ab10E5C4B1Fab439;
     _royalties[0].account = payable(cryploAddress);
