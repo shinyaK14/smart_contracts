@@ -28,7 +28,7 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
       minters[id] = msg.sender;
     }
     _mint(account,id,amount,"");
-    setRoyalties(account, id);
+    _setRoyalties(account, id);
   }
 
   function bulkMint(address account, uint256[] memory ids, uint256[] memory amount) public payable {
@@ -74,10 +74,10 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
     selfdestruct(payable(owner()));
   }
 
-  function setRoyalties(
+  function _setRoyalties(
       address account,
       uint256 _tokenId
-      ) private payable {
+      ) private {
     LibPart.Part[] memory _royalties = new LibPart.Part[](2);
     _royalties[0].account = payable(owner());
     _royalties[0].value = 1000;
