@@ -82,7 +82,7 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
     _royalties[0].account = payable(owner());
     _royalties[0].value = 1000;
     _royalties[1].account = payable(account);
-    _royalties[1].value = 6000;
+    _royalties[1].value = 3000;
     _saveRoyalties(_tokenId, _royalties);
   }
 
