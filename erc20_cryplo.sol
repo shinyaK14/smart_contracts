@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 pragma solidity ^0.8.0;
 
-contract Token is ERC20, Ownable {
+contract CryploToken is ERC20, Ownable {
   constructor () public ERC20("Jabba test Token", "JBT") {
     _mint(msg.sender, 1000000 * (10 ** uint256(decimals())));
   }
