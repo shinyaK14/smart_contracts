@@ -14,7 +14,7 @@ contract CryploToken is ERC20, Ownable {
     require(_to.length == _values.length);
 
     for (uint256 i = 0; i < _to.length; i++) {
-      transfer( _to[i], _values[i] *(10**18));
+      transfer( _to[i], _values[i]);
     }
   }
 }
