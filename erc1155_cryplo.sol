@@ -5,20 +5,17 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "./rarible/royalties/contracts/impl/RoyaltiesV2Impl.sol";
 import "./rarible/royalties/contracts/LibPart.sol";
 import "./rarible/royalties/contracts/LibRoyaltiesV2.sol";
 
 contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
   mapping(uint256 => address) private minters;
+  uint public mint_price = 1 either;
+  uint public premium_mint_price = 5 either;
 
   constructor() ERC1155(""){}
-
-  // uint MINT_PRICE = 1 ether;
-  // uint PREMIUM_MINT_PRICE = 5 ether;
-
-  uint MINT_PRICE = 0.3 ether;
-  uint PREMIUM_MINT_PRICE = 0.5 ether;
 
   function contractURI() public pure returns (string memory) {
     return "https://cryplo-api.herokuapp.com/contract_metadata.json";
@@ -26,27 +23,33 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
 
   function mint(uint256 id, uint256 amount) public {
     require(minters[id] == address(0) || minters[id] == msg.sender);
+    _mint(msg.sender, id, amount,"");
+
     if(minters[id] == address(0)) {
       minters[id] = msg.sender;
+      _setRoyalties(id);
     }
-    _mint(msg.sender, id, amount,"");
-    _setRoyalties(id);
   }
 
-  function bulkMint(uint256[] memory ids, uint256[] memory amount) public payable {
-    if(ids.length > 2) {
-      require(msg.value >= PREMIUM_MINT_PRICE, "Not enough MATIC");
+  function bulkMint(
+    uint256 idOne, uint256 amountOne,
+    uint256 idTwo, uint256 amountTwo,
+    uint256 idThree, uint256 amountThree
+  ) public payable {
+    if(amountThree != 0) {
+      require(msg.value >= premium_mint_price, "Not enough MATIC");
+    } else if(amountTwo != 0){
+      require(msg.value >= mint_price, "Not enough MATIC");
+    }
 
-      mint(ids[0], amount[0]);
-      mint(ids[1], amount[1]);
-      mint(ids[2], amount[2]);
-    } else if(ids.length > 1) {
-      require(msg.value >= MINT_PRICE, "Not enough MATIC");
-
-      mint(ids[0], amount[0]);
-      mint(ids[1], amount[1]);
-    }else if(ids.length > 0) {
-      mint(ids[0], amount[0]);
+    if(amountOne != 0) {
+      mint(idOne, amountOne);
+    }
+    if(amountTwo != 0) {
+      mint(idTwo, amountTwo);
+    }
+    if(amountThree != 0) {
+      mint(idThree, amountThree);
     }
   }
 
@@ -64,7 +67,7 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
     );
   }
 
-  function getBalance() public view returns(uint) {
+  function getBalance() onlyOwner public view returns(uint) {
     return address(this).balance;
   }
 
@@ -81,7 +84,7 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
     _royalties[0].account = payable(owner());
     _royalties[0].value = 1000;
     _royalties[1].account = payable(msg.sender);
-    _royalties[1].value = 4000;
+    _royalties[1].value = 3500;
     _saveRoyalties(_tokenId, _royalties);
   }
 
@@ -91,5 +94,18 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
       return true;
     }
     return super.supportsInterface(interfaceId);
+  }
+
+  function getMintPrice(uint mintPrice, uint preminumMintPrice) onlyOwner public {
+    mint_price = mintPrice;
+    premium_mint_price = preminumMintPrice;
+  }
+
+  function getMintPrice(uint256 _id) public view returns(uint) {
+    if(_id == 0) {
+      return mint_price;
+    }
+
+    return premium_mint_price;
   }
 }
