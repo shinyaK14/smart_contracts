@@ -5,17 +5,16 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 import "./rarible/royalties/contracts/impl/RoyaltiesV2Impl.sol";
 import "./rarible/royalties/contracts/LibPart.sol";
 import "./rarible/royalties/contracts/LibRoyaltiesV2.sol";
 
 contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
   mapping(uint256 => address) private minters;
-  uint public mint_price = 1 either;
-  uint public premium_mint_price = 5 either;
+  uint public mint_price  = 1 ether;
+  uint public premium_mint_price = 5 ether;
 
-  constructor() ERC1155(""){}
+  constructor() ERC1155(""){ }
 
   function contractURI() public pure returns (string memory) {
     return "https://cryplo-api.herokuapp.com/contract_metadata.json";
@@ -23,7 +22,7 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
 
   function mint(uint256 id, uint256 amount) public {
     require(minters[id] == address(0) || minters[id] == msg.sender);
-    _mint(msg.sender, id, amount,"");
+    _mint(msg.sender, id, amount, "");
 
     if(minters[id] == address(0)) {
       minters[id] = msg.sender;
@@ -109,3 +108,4 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
     return premium_mint_price;
   }
 }
+
