@@ -11,8 +11,8 @@ import "./rarible/royalties/contracts/LibRoyaltiesV2.sol";
 
 contract DeblogNFT is ERC1155, Ownable, RoyaltiesV2Impl {
   mapping(uint256 => address) private minters;
-  uint public mint_price  = 1 ether;
-  uint public premium_mint_price = 5 ether;
+  uint public mintPrice  = 1 ether;
+  uint public premiumMintPrice = 5 ether;
 
   constructor() ERC1155(""){ }
 
@@ -36,9 +36,9 @@ contract DeblogNFT is ERC1155, Ownable, RoyaltiesV2Impl {
     uint256 idThree, uint256 amountThree
   ) public payable {
     if(amountThree != 0) {
-      require(msg.value >= premium_mint_price, "Not enough MATIC");
+      require(msg.value >= premiumMintPrice, "Not enough MATIC");
     } else if(amountTwo != 0){
-      require(msg.value >= mint_price, "Not enough MATIC");
+      require(msg.value >= mintPrice, "Not enough MATIC");
     }
 
     if(amountOne != 0) {
@@ -95,17 +95,9 @@ contract DeblogNFT is ERC1155, Ownable, RoyaltiesV2Impl {
     return super.supportsInterface(interfaceId);
   }
 
-  function setMintPrice(uint mintPrice, uint preminumMintPrice) onlyOwner public {
-    mint_price = mintPrice * 1 ether;
-    premium_mint_price = preminumMintPrice * 1 ether;
-  }
-
-  function getMintPrice(uint256 _id) public view returns(uint) {
-    if(_id == 0) {
-      return mint_price;
-    }
-
-    return premium_mint_price;
+  function setMintPrice(uint _mint, uint _preminum) onlyOwner public {
+    mintPrice = _mint * 1 ether;
+    premiumMintPrice = _preminum * 1 ether;
   }
 }
 
