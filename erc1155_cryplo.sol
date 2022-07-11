@@ -17,7 +17,7 @@ contract DeblogNFT is ERC1155, Ownable, RoyaltiesV2Impl {
   constructor() ERC1155(""){ }
 
   function contractURI() public pure returns (string memory) {
-    return "https://cryplo-api.herokuapp.com/contract_metadata.json";
+    return "https://api.deblog.club/metadatas/nft.json";
   }
 
   function mint(uint256 id, uint256 amount) public {
@@ -60,7 +60,7 @@ contract DeblogNFT is ERC1155, Ownable, RoyaltiesV2Impl {
   function uri(uint256 _id) override public pure returns (string memory) {
     return string(
       abi.encodePacked(
-        "https://cryplo-api.herokuapp.com/nft/metadatas/",
+        "http://api.deblog.club/nft/metadatas/",
         Strings.toString(_id)
       )
     );
