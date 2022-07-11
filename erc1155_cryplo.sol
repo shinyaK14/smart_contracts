@@ -96,8 +96,8 @@ contract DeblogNFT is ERC1155, Ownable, RoyaltiesV2Impl {
   }
 
   function setMintPrice(uint mintPrice, uint preminumMintPrice) onlyOwner public {
-    mint_price = mintPrice;
-    premium_mint_price = preminumMintPrice;
+    mint_price = mintPrice * 1 ether;
+    premium_mint_price = preminumMintPrice * 1 ether;
   }
 
   function getMintPrice(uint256 _id) public view returns(uint) {
@@ -108,3 +108,4 @@ contract DeblogNFT is ERC1155, Ownable, RoyaltiesV2Impl {
     return premium_mint_price;
   }
 }
+
