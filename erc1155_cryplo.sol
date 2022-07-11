@@ -9,7 +9,7 @@ import "./rarible/royalties/contracts/impl/RoyaltiesV2Impl.sol";
 import "./rarible/royalties/contracts/LibPart.sol";
 import "./rarible/royalties/contracts/LibRoyaltiesV2.sol";
 
-contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
+contract DeblogNFT is ERC1155, Ownable, RoyaltiesV2Impl {
   mapping(uint256 => address) private minters;
   uint public mint_price  = 1 ether;
   uint public premium_mint_price = 5 ether;
@@ -95,7 +95,7 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
     return super.supportsInterface(interfaceId);
   }
 
-  function getMintPrice(uint mintPrice, uint preminumMintPrice) onlyOwner public {
+  function setMintPrice(uint mintPrice, uint preminumMintPrice) onlyOwner public {
     mint_price = mintPrice;
     premium_mint_price = preminumMintPrice;
   }
@@ -108,4 +108,3 @@ contract NFTCryplo is ERC1155, Ownable, RoyaltiesV2Impl {
     return premium_mint_price;
   }
 }
-
