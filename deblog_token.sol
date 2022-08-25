@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 pragma solidity ^0.8.0;
 
 contract DeblogToken is ERC20, Ownable {
-  constructor () public ERC20("Jabba test Token", "CRP") {
+  constructor () public ERC20("Deblog Token", "DEB") {
     _mint(msg.sender, 100000000 * (10 ** uint256(decimals())));
   }
 
