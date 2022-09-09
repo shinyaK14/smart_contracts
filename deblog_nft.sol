@@ -17,7 +17,7 @@ contract DeblogNFT is ERC1155, Ownable, RoyaltiesV2Impl {
   constructor() ERC1155(""){ }
 
   function contractURI() public pure returns (string memory) {
-    return "https://api.deblog.club/metadatas/nft.json";
+    return "https://static-files.pages.dev/deblog/metadata/nft.json";
   }
 
   function mint(uint256 id, uint256 amount) public {

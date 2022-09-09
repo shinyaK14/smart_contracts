@@ -10,6 +10,10 @@ contract DeblogToken is ERC20, Ownable {
     _mint(msg.sender, 100000000 * (10 ** uint256(decimals())));
   }
 
+  function contractURI() public pure returns (string memory) {
+    return "https://static-files.pages.dev/deblog/metadata/token.json";
+  }
+
   function bulksendToken(address[] memory _to, uint256[] memory _values) onlyOwner public payable {
     require(_to.length == _values.length);
 
