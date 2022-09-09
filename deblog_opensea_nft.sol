@@ -21,7 +21,6 @@ contract DeblogNFT is ERC1155, Ownable {
 
     if(minters[id] == address(0)) {
       minters[id] = msg.sender;
-      _setRoyalties(id);
     }
   }
 
