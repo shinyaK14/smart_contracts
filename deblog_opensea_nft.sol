@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract DeblogNFT is ERC1155, Ownable {
   mapping(uint256 => address) private minters;
+  mapping(uint256 => boolean) transferredIds;
 
   constructor() ERC1155(""){ }
 
@@ -58,12 +59,28 @@ contract DeblogNFT is ERC1155, Ownable {
     return address(this).balance;
   }
 
-  function withdraw() onlyOwner public payable {
+  function withdrawToOwner() onlyOwner public payable {
     payable(owner()).transfer(address(this).balance);
   }
 
   function selfDestruct() onlyOwner public payable {
     selfdestruct(payable(owner()));
   }
+
+  function _beforeTokenTransfer(
+    address operator,
+    address from,
+    address to,
+    uint256[] memory ids,
+    uint256[] memory amounts,
+    bytes memory data
+  ) internal override {
+    for(uint256 i=0; i < ids.length; i++){
+      require(!transferredIds[ids[i]]);
+      transferredIds[ids[i]] = true;
+    }
+    super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+  }
+
 }
 

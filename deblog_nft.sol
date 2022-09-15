@@ -70,7 +70,7 @@ contract DeblogNFT is ERC1155, Ownable, RoyaltiesV2Impl {
     return address(this).balance;
   }
 
-  function withdraw() onlyOwner public payable {
+  function withdrawToOwner() onlyOwner public payable {
     payable(owner()).transfer(address(this).balance);
   }
 
