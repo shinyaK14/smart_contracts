@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract DeblogNFT is ERC1155, Ownable {
   mapping(uint256 => address) private minters;
-  mapping(uint256 => boolean) transferredIds;
+  mapping(uint256 => bool) private transferredIds;
 
   constructor() ERC1155(""){ }
 
