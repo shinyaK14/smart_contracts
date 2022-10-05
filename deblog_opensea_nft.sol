@@ -83,6 +83,8 @@ contract DeblogNFT is ERC1155, Ownable {
   }
 
   function getNftOwners(uint256 id, uint index) public view returns(address){
+    if(nftOwners[id].length <= index) return;
+
     return nftOwners[id][index];
   }
 
